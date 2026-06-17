@@ -1,0 +1,34 @@
+[[redirects]]
+from = "/products"
+to = "/products.html"
+status = 200
+
+[[redirects]]
+from = "/cart"
+to = "/cart.html"
+status = 200
+
+[[redirects]]
+from = "/orders"
+to = "/orders.html"
+status = 200
+
+[[redirects]]
+from = "/wishlist"
+to = "/wishlist.html"
+status = 200
+
+[[redirects]]
+from = "/login"
+to = "/login.html"
+status = 200
+
+[[redirects]]
+from = "/dashboard"
+to = "/dashboard.html"
+status = 200
+
+[[redirects]]
+from = "/product"
+to = "/product.html"
+status = 200
