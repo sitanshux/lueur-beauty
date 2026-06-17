@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="View your Lueur Beauty order history. Track status, view details, and manage your orders." />
+  <title>My Orders | Lueur Beauty</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Lueur <em>Beauty</em></a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" id="nav-home">Home</a></li>
+        <li><a href="products.html" id="nav-products">Shop</a></li>
+        <li><a href="index.html#about" id="nav-about">Our Story</a></li>
+        <li><a href="index.html#reviews" id="nav-reviews">Reviews</a></li>
+        <li><a href="index.html#contact" id="nav-contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="nav-account" id="nav-login-link" title="Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </a>
+        <a href="wishlist.html" class="cart-icon" id="wishlist-icon-orders" title="Wishlist" style="margin-right:15px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+          <span class="wishlist-badge" id="wishlist-badge-orders">0</span>
+        </a>
+        <a href="cart.html" class="cart-icon" id="cart-icon-orders">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="m16 10a4 4 0 0 1-8 0" />
+          </svg>
+          <span class="cart-badge" id="cart-badge-orders">0</span>
+        </a>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="products-page">
+    <div class="products-hero">
+      <span class="section-tag">Account</span>
+      <h1 class="section-title">My Orders</h1>
+      <p>Track your order status and history</p>
+    </div>
+
+    <section style="padding:48px 0 80px">
+      <div class="container">
+
+        <!-- Loading state -->
+        <div id="orders-loading" style="text-align:center;padding:60px 20px;">
+          <div class="spinner" style="margin:0 auto 16px;"></div>
+          <p style="color:var(--text-muted);font-size:.9rem;letter-spacing:.3px">Loading your orders…</p>
+        </div>
+
+        <!-- Empty state -->
+        <div id="orders-empty" style="display:none;text-align:center;padding:80px 20px;">
+          <div style="font-size:3.5rem;margin-bottom:20px;opacity:.5">📦</div>
+          <h2 style="font-family:var(--font-heading);font-size:1.8rem;margin-bottom:10px;color:var(--text-primary)">No orders yet</h2>
+          <p style="color:var(--text-muted);margin-bottom:28px;font-size:.9rem">When you place an order, it will appear here.</p>
+          <a href="products.html" class="btn btn-primary">Start Shopping</a>
+        </div>
+
+        <!-- Orders list -->
+        <div id="orders-list" style="display:none"></div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- REVIEW MODAL -->
+  <div class="modal-overlay" id="review-modal">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>Write a Review</h3>
+        <button class="modal-close" onclick="closeReviewModal()" aria-label="Close modal">✕</button>
+      </div>
+      <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:24px;line-height:1.6;">Share your experience to help other customers.</p>
+
+      <div class="form-group">
+        <label for="review-product-name">Product</label>
+        <input type="text" id="review-product-name" readonly
+          style="background:var(--blush-light);cursor:not-allowed;color:var(--text-muted);" />
+      </div>
+
+      <div class="form-group">
+        <label>Your Rating</label>
+        <div id="star-rating-selector" style="font-size:2.4rem;color:#e0e0e0;display:inline-flex;gap:6px;margin-bottom:4px;">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+        <p id="rating-label-text" style="font-size:.8rem;color:var(--text-muted);margin-top:4px;">Tap a star to rate</p>
+      </div>
+
+      <div class="form-group">
+        <label for="review-comment-text">Your Review</label>
+        <textarea id="review-comment-text" rows="4" placeholder="How was the product? Share your honest thoughts…"></textarea>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:8px;">
+        <button onclick="closeReviewModal()" class="btn btn-outline-dark" style="flex:1;">Cancel</button>
+        <button id="btn-submit-review" class="btn btn-primary" style="flex:2;">Submit Review</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">Lueur <em>Beauty</em></div>
+            <p>Clean, botanical skincare crafted with care.</p>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="products.html">Shop All</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+              <li><a href="#">Shipping Policy</a></li>
+              <li><a href="#">Returns & Refunds</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Account</h4>
+            <ul>
+              <li><a href="login.html">Login / Signup</a></li>
+              <li><a href="cart.html">My Cart</a></li>
+              <li><a href="orders.html">My Orders</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 Lueur Beauty. All rights reserved.</p>
+        <p>Cruelty-Free · Vegan · Eco-Friendly</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="firebase.js"></script>
+  <script defer src="script.js"></script>
+</body>
+
+</html>

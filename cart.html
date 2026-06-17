@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Your Lueur Beauty shopping cart. Review items, apply promo codes and checkout securely."/>
+  <title>Cart | Lueur Beauty</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Lueur <em>Beauty</em></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" id="nav-home">Home</a></li>
+      <li><a href="products.html" id="nav-products">Shop</a></li>
+      <li><a href="index.html#about" id="nav-about">Our Story</a></li>
+      <li><a href="index.html#reviews" id="nav-reviews">Reviews</a></li>
+      <li><a href="index.html#contact" id="nav-contact">Contact</a></li>
+      <li><a href="orders.html" id="nav-orders">My Orders</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-account" id="nav-login-link" title="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </a>
+      <div class="nav-account-wrap nav-profile" id="nav-profile" style="display:none;">
+        <button class="nav-profile-btn" id="nav-profile-btn" aria-label="Account menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </button>
+        <div class="nav-profile-dropdown" id="nav-profile-dropdown">
+          <p class="nav-profile-email" id="nav-profile-email"></p>
+          <hr class="nav-profile-hr"/>
+          <a href="orders.html" style="display:block;font-size:.82rem;color:var(--text-muted);margin-bottom:10px;">My Orders</a>
+          <button class="nav-profile-logout" id="nav-logout-btn">Sign Out</button>
+        </div>
+      </div>
+      <a href="wishlist.html" class="cart-icon" id="wishlist-icon-cart" title="Wishlist" style="margin-right:15px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="wishlist-badge" id="wishlist-badge-cart">0</span>
+      </a>
+      <a href="cart.html" class="cart-icon" id="cart-icon-cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="m16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-badge" id="cart-badge-cart">0</span>
+      </a>
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="products-page">
+  <div class="products-hero">
+    <span class="section-tag">Shopping</span>
+    <h1 class="section-title">Your Cart</h1>
+    <p>Review your items and checkout securely</p>
+  </div>
+
+  <section class="cart-section">
+    <div class="container">
+
+      <!-- Empty state -->
+      <div id="cart-empty" style="display:none" class="empty-cart">
+        <div class="icon">🛒</div>
+        <h2>Your cart is empty</h2>
+        <p>Browse our collection to find something you'll love.</p>
+        <a href="products.html" class="btn btn-primary">Shop Now</a>
+      </div>
+
+      <!-- Cart layout -->
+      <div class="cart-layout" id="cart-layout">
+        <div>
+          <div id="cart-items-container" class="cart-items"></div>
+          <div style="margin-top:20px">
+            <a href="products.html" class="btn btn-outline">← Continue Shopping</a>
+          </div>
+        </div>
+        <div id="cart-summary-box" class="cart-summary">
+          <h3>Order Summary</h3>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="summary-subtotal">$0.00</span>
+          </div>
+          <div class="summary-row" id="summary-discount-row" style="display:none; color:var(--rose); font-weight:500;">
+            <span id="summary-discount-label">Discount</span>
+            <span id="summary-discount-value">-$0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span id="summary-shipping">$0.00</span>
+          </div>
+          <div class="summary-row" style="font-size:.8rem;color:var(--text-light);border-bottom:none;padding-top:0;">
+            <span id="free-shipping-msg">Free shipping on orders over $50 🎁</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="summary-total">$0.00</span>
+          </div>
+          <div class="promo-input">
+            <input type="text" id="promo-code" placeholder="Enter promo code"/>
+            <button id="promo-apply" class="btn btn-outline-dark btn-sm">Apply</button>
+          </div>
+          <div class="payment-method-selector" style="margin-top: 16px; margin-bottom: 16px;">
+            <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--text-dark);">Payment Method</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="display: flex; align-items: center; gap: 8px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 0.85rem; background: rgba(232, 116, 138, 0.02);">
+                <input type="radio" name="payment-method" value="COD" checked style="accent-color: var(--rose);" />
+                <span>Cash On Delivery (COD)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 0.85rem; background: rgba(232, 116, 138, 0.02);">
+                <input type="radio" name="payment-method" value="Razorpay" style="accent-color: var(--rose);" />
+                <span>Razorpay Online Payment</span>
+              </label>
+            </div>
+          </div>
+          <button id="checkout-btn" class="btn btn-primary btn-full" style="margin-top:8px">
+            Proceed to Checkout
+          </button>
+          <div style="text-align:center;margin-top:16px;font-size:.72rem;color:var(--text-light);letter-spacing:.5px">
+            🔒 Secure checkout &nbsp;·&nbsp; Fast delivery &nbsp;·&nbsp; Easy returns
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">Lueur <em>Beauty</em></div>
+          <p>Clean, botanical skincare crafted with care.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Shop All</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Shipping Policy</a></li>
+            <li><a href="#">Returns &amp; Refunds</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="login.html">Login / Signup</a></li>
+            <li><a href="wishlist.html">My Wishlist</a></li>
+            <li><a href="orders.html">My Orders</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>© 2026 Lueur Beauty. All rights reserved.</p>
+      <p>Cruelty-Free · Vegan · Eco-Friendly</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script type="module" src="firebase.js"></script>
+<script defer src="script.js"></script>
+
+</body>
+</html>

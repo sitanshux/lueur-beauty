@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Lueur Beauty Seller Dashboard — manage your products, orders, and store performance."/>
+  <title>Seller Dashboard | Lueur Beauty</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Lueur <em>Beauty</em></a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-outline btn-sm">← Storefront</a>
+      <a href="login.html" class="btn btn-primary btn-sm">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<!-- DASHBOARD LAYOUT -->
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h3>Seller Hub</h3>
+      <p>Lueur Beauty Admin</p>
+    </div>
+    <nav class="sidebar-menu">
+      <h5>Overview</h5>
+      <div class="sidebar-link active" data-target="view-dashboard">
+        <span class="icon">📊</span> Dashboard
+      </div>
+      <div class="sidebar-link" data-target="view-products">
+        <span class="icon">📦</span> Products
+      </div>
+      <h5 style="margin-top:20px">Store</h5>
+      <div class="sidebar-link" data-target="view-orders">
+        <span class="icon">🛒</span> Orders
+      </div>
+      <div class="sidebar-link" data-target="view-customers">
+        <span class="icon">👥</span> Customers
+      </div>
+      <div class="sidebar-link" data-target="view-analytics">
+        <span class="icon">📈</span> Analytics
+      </div>
+      <h5 style="margin-top:20px">Settings</h5>
+      <div class="sidebar-link" data-target="view-settings">
+        <span class="icon">⚙️</span> Settings
+      </div>
+      <div class="sidebar-link" data-target="view-notifications">
+        <span class="icon">🔔</span> Notifications <span class="badge" id="nav-notif-badge" style="display:none; margin-left: auto; background: var(--rose); color: #fff;">0</span>
+      </div>
+      <div class="sidebar-link" data-target="view-messages">
+        <span class="icon">💬</span> Messages <span class="badge" id="nav-msg-badge" style="display:none; margin-left: auto; background: var(--rose); color: #fff;">0</span>
+      </div>
+      <div class="sidebar-link" style="margin-top:40px">
+        <a href="login.html" id="dash-logout-btn" style="display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none">
+          <span class="icon">🚪</span> Logout
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="dashboard-main">
+    <div class="dash-header">
+      <div>
+        <h1 style="font-family:var(--font-heading)" id="seller-greeting">Good morning, Seller</h1>
+        <p>Here's what's happening in your store today</p>
+      </div>
+      <button id="add-product-btn" class="btn btn-primary" style="display:none;">+ Add Product</button>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="view-dashboard" class="dash-view active">
+      <div class="stats-cards" id="stats-cards"><!-- Populated by JS --></div>
+
+      <div class="dash-section" style="margin-bottom:24px">
+        <div class="dash-section-header">
+          <h2>Quick Actions</h2>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" onclick="openProductModal()">+ Add Product</button>
+          <a href="products.html" class="btn btn-outline btn-sm">View Storefront</a>
+          <button class="btn btn-outline btn-sm" onclick="exportOrdersToCSV()">Export CSV</button>
+          <button class="btn btn-outline btn-sm" onclick="generateSalesReport()">Generate Report</button>
+        </div>
+      </div>
+
+      <div class="dash-section">
+        <div class="dash-section-header">
+          <h2>Recent Orders</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Products</th>
+                <th>Amount</th>
+                <th>Promo</th>
+                <th>Payment Method</th>
+                <th>Payment Status</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="orders-recent-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS VIEW -->
+    <div id="view-products" class="dash-view">
+      <div class="dash-section">
+        <div class="dash-section-header">
+          <h2>Product Inventory</h2>
+          <span style="font-size:.82rem;color:var(--text-light)" id="product-count"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody"><!-- Populated by JS --></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS VIEW -->
+    <div id="view-orders" class="dash-view">
+      <div class="dash-section">
+        <div class="dash-section-header">
+          <h2>All Orders</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Products</th>
+                <th>Amount</th>
+                <th>Promo</th>
+                <th>Payment Method</th>
+                <th>Payment Status</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="orders-all-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS VIEW -->
+    <div id="view-customers" class="dash-view">
+      <div class="dash-section">
+        <div class="dash-section-header">
+          <h2>Customers</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Orders Count</th>
+                <th>Total Spent</th>
+                <th>Last Order Date</th>
+              </tr>
+            </thead>
+            <tbody id="customers-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS VIEW -->
+    <div id="view-analytics" class="dash-view">
+      <div class="stats-cards" id="analytics-cards" style="margin-bottom: 24px;">
+        <!-- Populated by JS -->
+      </div>
+      <div class="dash-section">
+        <div class="dash-section-header">
+          <h2>Low Stock Products</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Stock</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody id="low-stock-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS VIEW -->
+    <div id="view-settings" class="dash-view">
+      <div class="dash-section">
+        <div class="dash-section-header">
+          <h2>Store Settings</h2>
+        </div>
+        <form id="settings-form" style="max-width: 600px;">
+          <div class="form-group">
+            <label>Store Name</label>
+            <input type="text" id="set-store-name" />
+          </div>
+          <div class="form-group">
+            <label>Store Email</label>
+            <input type="email" id="set-store-email" />
+          </div>
+          <div class="form-group">
+            <label>Store Phone</label>
+            <input type="text" id="set-store-phone" />
+          </div>
+          <div class="form-group">
+            <label>Store Address</label>
+            <textarea id="set-store-address"></textarea>
+          </div>
+          <div style="display:flex;gap:14px;margin-bottom:14px;">
+            <div class="form-group" style="flex:1;margin-bottom:0">
+              <label>Currency</label>
+              <input type="text" id="set-currency" placeholder="USD" />
+            </div>
+            <div class="form-group" style="flex:1;margin-bottom:0">
+              <label>Shipping Cost ($)</label>
+              <input type="number" id="set-shipping" step="0.01" />
+            </div>
+            <div class="form-group" style="flex:1;margin-bottom:0">
+              <label>Free Shipping Threshold ($)</label>
+              <input type="number" id="set-free-shipping" step="0.01" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="save-settings-btn">Save Settings</button>
+        </form>
+      </div>
+
+      <!-- PROMO CODES SECTION -->
+      <div class="dash-section" style="margin-top:24px;">
+        <div class="dash-section-header">
+          <h2>Promo Codes</h2>
+        </div>
+        <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:16px;">
+          Add discount codes that customers can use at checkout. Active codes will appear in the homepage announcement bar.
+        </p>
+        <div id="promo-codes-list" style="margin-bottom:16px;">
+          <!-- Populated by JS -->
+        </div>
+        <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-bottom:14px; padding:16px; border:1px dashed var(--border); border-radius:8px; background:rgba(232,116,138,0.02);">
+          <div class="form-group" style="flex:2; min-width:120px; margin-bottom:0;">
+            <label>Code Name</label>
+            <input type="text" id="promo-new-code" placeholder="e.g. SUMMER25" style="text-transform:uppercase;" />
+          </div>
+          <div class="form-group" style="flex:1; min-width:80px; margin-bottom:0;">
+            <label>Discount (%)</label>
+            <input type="number" id="promo-new-discount" placeholder="e.g. 25" min="1" max="100" step="1" />
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" id="promo-add-btn" style="height:40px; white-space:nowrap;">
+            + Add Code
+          </button>
+        </div>
+        <button type="button" class="btn btn-primary" id="save-promos-btn">Save Promo Codes</button>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS VIEW -->
+    <div id="view-notifications" class="dash-view">
+      <div class="dash-section">
+        <div class="dash-section-header">
+          <h2>Notifications</h2>
+          <button class="btn btn-outline btn-sm" onclick="markAllNotificationsRead()">Mark All as Read</button>
+        </div>
+        <div id="notifications-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES VIEW -->
+    <div id="view-messages" class="dash-view">
+      <div class="dash-section">
+        <div class="dash-section-header">
+          <h2>Customer Messages</h2>
+          <button class="btn btn-outline btn-sm" onclick="markAllMessagesRead()">Mark All as Read</button>
+        </div>
+        <div id="messages-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ADD / EDIT PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Add New Product</h3>
+      <button class="modal-close">✕</button>
+    </div>
+    <form id="modal-product-form">
+      <input type="hidden" id="form-product-id"/>
+      <div class="form-group">
+        <label for="form-name">Product Name *</label>
+        <input type="text" id="form-name" placeholder="e.g. Rose Glow Serum" required/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="form-group" style="margin-bottom:0">
+          <label for="form-mrp">MRP ($)</label>
+          <input type="number" id="form-mrp" placeholder="e.g. 100" min="0" step="0.01"/>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label for="form-discount">Discount (%)</label>
+          <input type="number" id="form-discount" placeholder="e.g. 20" min="0" max="100"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label for="form-price">Sale Price ($) *</label>
+          <input type="number" id="form-price" placeholder="e.g. 80" min="0" step="0.01" required/>
+        </div>
+        <div class="form-group">
+          <label for="form-stock">Stock *</label>
+          <input type="number" id="form-stock" placeholder="50" min="0" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="form-category">Category *</label>
+        <select id="form-category">
+          <option>Serums</option>
+          <option>Moisturizers</option>
+          <option>Toners</option>
+          <option>Masks</option>
+          <option>Lip Care</option>
+          <option>Eye Care</option>
+          <option>Oils</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="form-desc">Description</label>
+        <textarea id="form-desc" placeholder="Short product description..." rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="form-image">Product Image</label>
+        <input type="file" id="form-image" accept="image/*" style="padding:10px 14px;font-size:.85rem"/>
+        <div id="form-image-preview" style="margin-top:8px"></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:8px">
+        <button type="submit" class="btn btn-primary" style="flex:1">Save Product</button>
+        <button type="button" class="btn btn-outline" onclick="closeProductModal()" style="flex:1">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="firebase.js"></script>
+<script defer src="script.js"></script>
+</body>
+</html>

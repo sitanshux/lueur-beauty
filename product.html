@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Product Details | Lueur Beauty" />
+  <title>Product | Lueur Beauty</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Lueur <em>Beauty</em></a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" id="nav-home">Home</a></li>
+        <li><a href="products.html" class="active" id="nav-products">Shop</a></li>
+        <li><a href="index.html#about" id="nav-about">Our Story</a></li>
+        <li><a href="index.html#reviews" id="nav-reviews">Reviews</a></li>
+        <li><a href="index.html#contact" id="nav-contact">Contact</a></li>
+        <li><a href="orders.html" id="nav-orders">My Orders</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="nav-account" id="nav-login-link" title="Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </a>
+        <a href="wishlist.html" class="cart-icon" id="wishlist-icon-products" title="Wishlist"
+          style="margin-right:15px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+          <span class="wishlist-badge" id="wishlist-badge-products">0</span>
+        </a>
+        <a href="cart.html" class="cart-icon" id="cart-icon-products">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="m16 10a4 4 0 0 1-8 0" />
+          </svg>
+          <span class="cart-badge" id="cart-badge-products">0</span>
+        </a>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="product-detail-page">
+    <div class="container">
+
+      <!-- LOADING STATE -->
+      <div id="product-loading">
+        <div class="spinner"></div>
+        <p style="margin-top:20px; color:var(--text-light);">Loading product details...</p>
+      </div>
+
+      <!-- ERROR STATE -->
+      <div id="product-error">
+        <h2>Product Not Found</h2>
+        <p style="color:var(--text-light); margin-bottom:30px;">We couldn't find the product you're looking for.</p>
+        <a href="products.html" class="btn" style="text-decoration:none;">Back to Shop</a>
+      </div>
+
+      <!-- PRODUCT DETAIL CONTENT -->
+      <div id="product-content">
+        <div class="product-detail-container">
+          <div class="product-image-box" id="detail-image-box">
+            <!-- Populated by JS -->
+          </div>
+          <div class="product-info-box">
+            <div class="category" id="detail-category"></div>
+            <h1 id="detail-name"></h1>
+            <div id="detail-rating-summary">
+              <!-- Populated by JS -->
+            </div>
+            <div class="price-wrap">
+              <span class="price" id="detail-price"></span>
+              <span class="old-price" id="detail-old-price"></span>
+            </div>
+            <div>
+              <span class="stock-badge" id="detail-stock-badge">In Stock</span>
+            </div>
+            <p class="desc" id="detail-desc"></p>
+            <div style="display:flex; gap:12px; margin-top:8px;">
+              <button class="btn-large" id="detail-add-btn" style="flex:1; margin-top:0;">Add to Cart</button>
+              <button class="btn-wishlist-detail" id="detail-wishlist-btn" title="Add to Wishlist">❤️ Wishlist</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CUSTOMER REVIEWS -->
+        <section class="customer-reviews">
+          <h2>Customer Reviews</h2>
+          <div id="reviews-container">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- RELATED PRODUCTS -->
+        <section class="related-products">
+          <h2 class="related-title">You May Also Like</h2>
+          <div class="products-grid" id="related-grid">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">Lueur <em>Beauty</em></div>
+            <p>Clean, botanical skincare crafted with care.</p>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="products.html">Shop All</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+              <li><a href="#">Shipping Policy</a></li>
+              <li><a href="#">Returns & Refunds</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Account</h4>
+            <ul>
+              <li><a href="login.html">Login / Signup</a></li>
+              <li><a href="cart.html">My Cart</a></li>
+              <li><a href="dashboard.html">Seller Dashboard</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2026 Lueur Beauty. All rights reserved.</p>
+        <p>Cruelty-Free · Vegan · Eco-Friendly</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="firebase.js"></script>
+  <script defer src="script.js"></script>
+</body>
+
+</html>

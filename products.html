@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Shop all Lueur Beauty products — serums, moisturizers, toners, masks, lip care & more. Natural, cruelty-free skincare."/>
+  <title>Products | Lueur Beauty</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>"/>
+</head>
+<body>
+
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Lueur <em>Beauty</em></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" id="nav-home">Home</a></li>
+      <li><a href="products.html" class="active" id="nav-products">Shop</a></li>
+      <li><a href="index.html#about" id="nav-about">Our Story</a></li>
+      <li><a href="index.html#reviews" id="nav-reviews">Reviews</a></li>
+      <li><a href="index.html#contact" id="nav-contact">Contact</a></li>
+      <li><a href="orders.html" id="nav-orders">My Orders</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-account" id="nav-login-link" title="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <a href="wishlist.html" class="cart-icon" id="wishlist-icon-products" title="Wishlist" style="margin-right:15px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="wishlist-badge" id="wishlist-badge-products">0</span>
+      </a>
+      <a href="cart.html" class="cart-icon" id="cart-icon-products">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="m16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-badge" id="cart-badge-products">0</span>
+      </a>
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="products-page">
+  <div class="products-hero">
+    <span class="section-tag">Collection</span>
+    <h1 class="section-title">All Products</h1>
+    <p>Our full range of natural, cruelty-free skincare</p>
+    <div class="search-bar">
+      <input type="text" id="product-search" placeholder="Search products..."/>
+      <button>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTERS + GRID -->
+  <section class="products-section" style="padding-top:48px">
+    <div class="container">
+      <div class="products-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="Serums">Serums</button>
+        <button class="filter-btn" data-filter="Moisturizers">Moisturizers</button>
+        <button class="filter-btn" data-filter="Toners">Toners</button>
+        <button class="filter-btn" data-filter="Masks">Masks</button>
+        <button class="filter-btn" data-filter="Lip Care">Lip Care</button>
+        <button class="filter-btn" data-filter="Eye Care">Eye Care</button>
+        <button class="filter-btn" data-filter="Oils">Oils</button>
+      </div>
+      <div class="products-grid" id="products-page-grid"><!-- Populated by JS --></div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">Lueur <em>Beauty</em></div>
+          <p>Clean, botanical skincare crafted with care.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Shop All</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Shipping Policy</a></li>
+            <li><a href="#">Returns & Refunds</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="login.html">Login / Signup</a></li>
+            <li><a href="cart.html">My Cart</a></li>
+            <li><a href="dashboard.html">Seller Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>© 2026 Lueur Beauty. All rights reserved.</p>
+      <p>Cruelty-Free · Vegan · Eco-Friendly</p>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="firebase.js"></script>
+<script defer src="script.js"></script>
+</body>
+</html>
