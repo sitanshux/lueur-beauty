@@ -2659,3 +2659,4 @@ if (page === 'login.html' || page === 'login') initAuthPage();
 if (page === 'dashboard.html' || page === 'dashboard') initDashboard();
 if (page === 'orders.html' || page === 'orders') initOrdersPage();
 });
+``
