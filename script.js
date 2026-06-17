@@ -2653,6 +2653,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const page = window.location.pathname.split('/').pop() || 'index.html';
   if (page === 'index.html' || page === '') { initHomePage(); initContactForm(); }
   if (page === 'products.html' || page === 'products') initProductsPage();
+   if (page === 'product.html' || page === 'product') initProductsPage();
 if (page === 'cart.html' || page === 'cart') initCartPage();
 if (page === 'wishlist.html' || page === 'wishlist') initWishlistPage();
 if (page === 'login.html' || page === 'login') initAuthPage();
