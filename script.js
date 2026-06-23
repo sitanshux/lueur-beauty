@@ -1881,21 +1881,24 @@ async function handleProductFormSubmit(e) {
     formData.append('file', file);
     formData.append('upload_preset', 'lueur_products');
 
-    const response = await fetch(
-        'https://api.cloudinary.com/v1_1/dgsuollyy/image/upload',
-        {
-            method: 'POST',
-            body: formData
-        }
-    );
-
-    const data = await response.json();
-
-    if (data.secure_url) {
-        productData.image = data.secure_url;
-    } else {
-        throw new Error('Cloudinary upload failed');
+     const response = await fetch(
+    'https://api.cloudinary.com/v1_1/dgsuollyy/image/upload',
+    {
+        method: 'POST',
+        body: formData
     }
+);
+
+const data = await response.json();
+
+console.log('Cloudinary status:', response.status);
+console.log('Cloudinary response:', data);
+
+if (data.secure_url) {
+    productData.image = data.secure_url;
+} else {
+    throw new Error(JSON.stringify(data));
+}
 }
 
     if (id) {
