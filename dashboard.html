@@ -10,6 +10,53 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>"/>
+  <style>
+    body { display: none !important; }
+    .authorized body { display: block !important; }
+  </style>
+  <script>
+    (async function() {
+      async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      const token = localStorage.getItem('lueur_seller_auth');
+      if (!token) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      try {
+        const session = JSON.parse(token);
+        const { email, timestamp, signature } = session;
+        
+        const now = Date.now();
+        const oneDay = 24 * 60 * 60 * 1000;
+        if (now - timestamp > oneDay || email !== 'seller.lueur@admin.com') {
+          localStorage.removeItem('lueur_seller_auth');
+          window.location.replace('login.html');
+          return;
+        }
+
+        const secret = 'lueur_secret_salt_2026';
+        const expectedSignature = await sha256(email + timestamp + secret);
+        if (signature !== expectedSignature) {
+          localStorage.removeItem('lueur_seller_auth');
+          window.location.replace('login.html');
+          return;
+        }
+
+        // Valid session! Show the body
+        document.documentElement.classList.add('authorized');
+      } catch (e) {
+        localStorage.removeItem('lueur_seller_auth');
+        window.location.replace('login.html');
+      }
+    })();
+  </script>
 </head>
 <body>
 

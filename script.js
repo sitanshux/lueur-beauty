@@ -6,6 +6,13 @@
 function roundPrice(val) { return Math.round(parseFloat(val || 0) * 100) / 100; }
 function formatPrice(val) { return roundPrice(val).toFixed(2); }
 
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 /* ===== GLOBAL STORE SETTINGS ===== */
 window.storeSettings = {
   storeName: "Lueur Beauty",
@@ -926,9 +933,17 @@ function initAuthPage() {
     const password = document.getElementById('login-pass').value;
     const btn = e.target.querySelector('button[type="submit"]');
 
-    // ── Seller shortcut (hardcoded, no Firebase) ─────────────────────────
-    if (email.toLowerCase() === SELLER_EMAIL.toLowerCase() && password === SELLER_PASSWORD) {
-      localStorage.setItem('lueur_seller_auth', 'true');
+    // ── Seller shortcut (encrypted session generation) ───────────────────
+    const passwordHash = await sha256(password);
+    if (email.toLowerCase() === SELLER_EMAIL.toLowerCase() && passwordHash === SELLER_PASSWORD_HASH) {
+      const timestamp = Date.now();
+      const signature = await sha256(email.toLowerCase() + timestamp + SELLER_SECRET);
+      const session = {
+        email: email.toLowerCase(),
+        timestamp: timestamp,
+        signature: signature
+      };
+      localStorage.setItem('lueur_seller_auth', JSON.stringify(session));
       showToast('Welcome back, Seller!', 'success');
       setTimeout(() => { window.location.href = 'dashboard.html'; }, 700);
       return;
@@ -1048,25 +1063,44 @@ function switchDashView(targetId) {
 
 /* ===== SELLER AUTH CONSTANTS ===== */
 const SELLER_EMAIL = 'seller.lueur@admin.com';
-const SELLER_PASSWORD = 'LueurSeller123';
+const SELLER_PASSWORD_HASH = '3f94e9239b744bfdd953671b78bc069dce93f9f9a474768606200f39d16eff33';
+const SELLER_SECRET = 'lueur_secret_salt_2026';
 
-function checkSellerAuth() {
-  return localStorage.getItem('lueur_seller_auth') === 'true';
+async function checkSellerAuth() {
+  const token = localStorage.getItem('lueur_seller_auth');
+  if (!token) return false;
+  try {
+    const session = JSON.parse(token);
+    const { email, timestamp, signature } = session;
+    const now = Date.now();
+    const oneDay = 24 * 60 * 60 * 1000;
+    if (now - timestamp > oneDay || email !== SELLER_EMAIL.toLowerCase()) {
+      return false;
+    }
+    const expectedSignature = await sha256(email + timestamp + SELLER_SECRET);
+    return signature === expectedSignature;
+  } catch (e) {
+    return false;
+  }
 }
 
 /* ===== DASHBOARD ===== */
-function initDashboard() {
+async function initDashboard() {
   // Guard: only allow seller
-  if (!checkSellerAuth()) {
+  const isAuth = await checkSellerAuth();
+  if (!isAuth) {
     window.location.replace('login.html');
     return;
   }
 
-  // Logout button
-  document.getElementById('dash-logout-btn')?.addEventListener('click', e => {
-    e.preventDefault();
-    localStorage.removeItem('lueur_seller_auth');
-    window.location.href = 'login.html';
+  // Logout buttons (both sidebar and navbar)
+  const logoutSelector = '#dash-logout-btn, .navbar a[href="login.html"]';
+  document.querySelectorAll(logoutSelector).forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      localStorage.removeItem('lueur_seller_auth');
+      window.location.href = 'login.html';
+    });
   });
 
   updateSellerGreeting();
@@ -2558,7 +2592,7 @@ function renderHomepageContactDetails() {
 }
 
 /* ===== INIT ===== */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initNavbar();
   initAuthState();   // connect Firebase auth to navbar on every page
   initGlobalStoreSettings();
@@ -2657,6 +2691,6 @@ document.addEventListener('DOMContentLoaded', () => {
 if (page === 'cart.html' || page === 'cart') initCartPage();
 if (page === 'wishlist.html' || page === 'wishlist') initWishlistPage();
 if (page === 'login.html' || page === 'login') initAuthPage();
-if (page === 'dashboard.html' || page === 'dashboard') initDashboard();
+if (page === 'dashboard.html' || page === 'dashboard') await initDashboard();
 if (page === 'orders.html' || page === 'orders') initOrdersPage();
 });
