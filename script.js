@@ -1889,14 +1889,7 @@ async function handleProductFormSubmit(e) {
         }
     );
 
-    console.log(response.status);
-const data = await response.json();
-console.log(data);
-
-     const data = await response.json();
-     console.log(data);
-    
-     console.log(response.status);
+    const data = await response.json();
 
     if (data.secure_url) {
         productData.image = data.secure_url;
