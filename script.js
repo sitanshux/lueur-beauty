@@ -25,6 +25,35 @@ window.storeSettings = {
   promoCodes: []
 };
 
+/*=====CLOUDINARY====*/
+const CLOUDINARY_CLOUD_NAME = "dgsuollyy";
+const CLOUDINARY_UPLOAD_PRESET = "lueur_products";
+
+/* Upload Function( cloudinary)*/
+async function uploadToCloudinary(file) {
+  const formData = new FormData();
+
+  formData.append("file", file);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error?.message || "Upload failed");
+  }
+
+  return data.secure_url;
+}
+
+
 /* ===== PRODUCTS DATABASE ===== */
 const PRODUCTS = [
   { id: 1, name: "Rose Glow Serum", category: "Serums", price: 48.00, oldPrice: 62.00, emoji: "🌹", image: "images/product_serum.png", desc: "Hydrating rose-infused serum for a luminous, dewy complexion.", stock: 24, featured: true },
@@ -1845,9 +1874,29 @@ async function handleProductFormSubmit(e) {
     // Do not use Firebase Storage. Keep Firestore-only architecture.
     // If a local image file is selected, set image field to empty string 
     // so it falls back to the default UI placeholder instead of saving a broken local filename.
-    if (file) {
-      productData.image = '';
+     if (file) {
+    submitBtn.textContent = 'Uploading image...';
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'lueur_products');
+
+    const response = await fetch(
+        'https://api.cloudinary.com/v1_1/dgsuollyy/image/upload',
+        {
+            method: 'POST',
+            body: formData
+        }
+    );
+
+    const data = await response.json();
+
+    if (data.secure_url) {
+        productData.image = data.secure_url;
+    } else {
+        throw new Error('Cloudinary upload failed');
     }
+}
 
     if (id) {
       // ── UPDATE ──
