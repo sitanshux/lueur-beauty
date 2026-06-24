@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Website Editor | Lueur Beauty Seller Hub</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>"/>
+  
+  <style>
+    body { display: none !important; }
+    .authorized body { display: flex !important; }
+    
+    /* Website Editor specific layout */
+    .editor-container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #faf8f5;
+    }
+    
+    .editor-sidebar {
+      width: 420px;
+      height: 100%;
+      background: #ffffff;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 12px rgba(44, 31, 23, 0.03);
+      z-index: 10;
+      flex-shrink: 0;
+    }
+    
+    .editor-sidebar-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+    }
+    
+    .editor-sidebar-header h2 {
+      font-family: var(--font-heading);
+      color: var(--text-primary);
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+    
+    .editor-sidebar-header p {
+      font-size: 0.78rem;
+      color: var(--text-light);
+    }
+    
+    .editor-sidebar-actions {
+      display: flex;
+      gap: 10px;
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--border);
+      background: #ffffff;
+    }
+    
+    .editor-sidebar-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px 40px;
+    }
+    
+    .editor-preview {
+      flex: 1;
+      height: 100%;
+      background: #e6dfd9;
+      position: relative;
+    }
+    
+    .editor-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #ffffff;
+    }
+    
+    /* Controls Styling */
+    .editor-section {
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #ffffff;
+    }
+    
+    .editor-section-header {
+      padding: 14px 18px;
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--border);
+      font-weight: 500;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    
+    .editor-section-header::after {
+      content: '▾';
+      font-size: 1rem;
+      transition: transform 0.3s;
+    }
+    
+    .editor-section.collapsed .editor-section-header::after {
+      transform: rotate(-90deg);
+    }
+    
+    .editor-section-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .editor-section.collapsed .editor-section-body {
+      display: none;
+    }
+    
+    .editor-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .editor-field label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .editor-field input[type="text"],
+    .editor-field textarea,
+    .editor-field select {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .editor-field input[type="text"]:focus,
+    .editor-field textarea:focus,
+    .editor-field select:focus {
+      border-color: var(--rose);
+    }
+    
+    .editor-field textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    /* Color pickers alignment */
+    .color-picker-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .color-picker-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--warm-white);
+    }
+    
+    .color-picker-field label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      flex: 1;
+      color: var(--text-muted);
+    }
+    
+    .color-picker-field input[type="color"] {
+      border: none;
+      outline: none;
+      background: none;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      padding: 0;
+    }
+    
+    /* Reordering controls */
+    .order-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .order-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .order-item-actions {
+      display: flex;
+      gap: 6px;
+    }
+    
+    .order-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.75rem;
+      color: var(--text-light);
+      transition: background 0.2s;
+    }
+    
+    .order-btn:hover {
+      background: var(--cream);
+      color: var(--text-primary);
+    }
+    
+    /* File upload button styling */
+    .file-upload-row {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .file-upload-row input[type="text"] {
+      flex: 1;
+    }
+    
+    .file-upload-btn-wrap {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+    
+    .file-upload-btn-wrap button {
+      height: 100%;
+      padding: 0 14px;
+      font-size: 0.8rem;
+    }
+    
+    .file-upload-btn-wrap input[type="file"] {
+      position: absolute;
+      font-size: 100px;
+      opacity: 0;
+      right: 0;
+      top: 0;
+      cursor: pointer;
+    }
+    
+    /* Visibility Toggle */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+    }
+    
+    .toggle-row label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--border);
+      transition: .3s;
+      border-radius: 24px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px; width: 18px;
+      left: 3px; bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: var(--rose);
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+    
+    /* Mobile responsive toggle header */
+    .mobile-editor-bar {
+      display: none;
+      padding: 10px 16px;
+      background: var(--text-primary);
+      color: #ffffff;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+    
+    .mobile-editor-bar button {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+    
+    @media (max-width: 768px) {
+      .editor-container {
+        flex-direction: column;
+        height: calc(100vh - 44px);
+      }
+      
+      .mobile-editor-bar {
+        display: flex;
+      }
+      
+      .editor-sidebar {
+        width: 100%;
+        height: 100%;
+      }
+      
+      .editor-preview {
+        width: 100%;
+        height: 100%;
+        display: none;
+      }
+      
+      .preview-active .editor-sidebar {
+        display: none;
+      }
+      
+      .preview-active .editor-preview {
+        display: block;
+      }
+    }
+  </style>
+  
+  <!-- Security authentication pre-render guard script -->
+  <script>
+    (async function() {
+      async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      const token = localStorage.getItem('lueur_seller_auth');
+      if (!token) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      try {
+        const session = JSON.parse(token);
+        const { email, timestamp, signature } = session;
+        
+        const now = Date.now();
+        const oneDay = 24 * 60 * 60 * 1000;
+        if (now - timestamp > oneDay || email !== 'seller.lueur@admin.com') {
+          localStorage.removeItem('lueur_seller_auth');
+          window.location.replace('login.html');
+          return;
+        }
+
+        const secret = 'lueur_secret_salt_2026';
+        const expectedSignature = await sha256(email + timestamp + secret);
+        if (signature !== expectedSignature) {
+          localStorage.removeItem('lueur_seller_auth');
+          window.location.replace('login.html');
+          return;
+        }
+
+        // Session valid
+        document.documentElement.classList.add('authorized');
+      } catch (e) {
+        localStorage.removeItem('lueur_seller_auth');
+        window.location.replace('login.html');
+      }
+    })();
+  </script>
+</head>
+<body class="authorized">
+
+  <div class="mobile-editor-bar">
+    <span style="font-weight: 500; font-size: 0.85rem;">Lueur Builder</span>
+    <button id="mobile-view-toggle">Switch to Live Preview</button>
+  </div>
+
+  <div class="editor-container" id="editor-layout">
+    
+    <!-- LEFT SIDEBAR: CONTROLS -->
+    <div class="editor-sidebar">
+      <div class="editor-sidebar-header">
+        <h2>Website Editor</h2>
+        <p>Customize storefront details, layout, visibility, and themes.</p>
+      </div>
+      
+      <div class="editor-sidebar-actions">
+        <button id="save-publish-btn" class="btn btn-primary btn-sm" style="flex: 2;">Save & Publish</button>
+        <a href="dashboard.html" class="btn btn-outline-dark btn-sm" style="flex: 1; text-align: center; text-decoration: none;">Exit</a>
+      </div>
+      
+      <div class="editor-sidebar-body">
+        
+        <!-- 1. Store Identity -->
+        <div class="editor-section">
+          <div class="editor-section-header">Store Identity</div>
+          <div class="editor-section-body">
+            <div class="editor-field">
+              <label for="logoText">Logo Brand Name</label>
+              <input type="text" id="logoText" placeholder="Lueur <em>Beauty</em>"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Hero Section -->
+        <div class="editor-section">
+          <div class="editor-section-header">Hero Banner</div>
+          <div class="editor-section-body">
+            <div class="editor-field">
+              <label for="heroTitle">Hero Title</label>
+              <textarea id="heroTitle" placeholder="Elevated Essentials for Healthy Skin"></textarea>
+            </div>
+            <div class="editor-field">
+              <label for="heroSubtitle">Hero Subtitle</label>
+              <textarea id="heroSubtitle" placeholder="Thoughtfully crafted skincare..."></textarea>
+            </div>
+            <div class="editor-field">
+              <label for="heroImage">Hero Image URL</label>
+              <div class="file-upload-row">
+                <input type="text" id="heroImage" placeholder="images/..."/>
+                <div class="file-upload-btn-wrap">
+                  <button class="btn btn-outline-dark btn-sm" type="button">Upload</button>
+                  <input type="file" class="file-uploader" data-target="heroImage" accept="image/*"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. About Section -->
+        <div class="editor-section">
+          <div class="editor-section-header">About Section</div>
+          <div class="editor-section-body">
+            <div class="editor-field">
+              <label for="aboutText">Primary About Text</label>
+              <textarea id="aboutText" placeholder="Founded in 2020..."></textarea>
+            </div>
+            <div class="editor-field">
+              <label for="aboutTextSecondary">Secondary About Text</label>
+              <textarea id="aboutTextSecondary" placeholder="Every product is..."></textarea>
+            </div>
+            <div class="editor-field">
+              <label for="aboutImage">About Section Image</label>
+              <div class="file-upload-row">
+                <input type="text" id="aboutImage" placeholder="images/..."/>
+                <div class="file-upload-btn-wrap">
+                  <button class="btn btn-outline-dark btn-sm" type="button">Upload</button>
+                  <input type="file" class="file-uploader" data-target="aboutImage" accept="image/*"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Promo Banner -->
+        <div class="editor-section">
+          <div class="editor-section-header">Promotional Banner</div>
+          <div class="editor-section-body">
+            <div class="editor-field">
+              <label for="promoBannerTag">Promo Tag</label>
+              <input type="text" id="promoBannerTag" placeholder="Seasonal Edit"/>
+            </div>
+            <div class="editor-field">
+              <label for="promoBannerTitle">Promo Title</label>
+              <textarea id="promoBannerTitle" placeholder="Spring Collection Up to 40% Off"></textarea>
+            </div>
+            <div class="editor-field">
+              <label for="promoBannerSubtitle">Promo Subtitle</label>
+              <textarea id="promoBannerSubtitle" placeholder="Light textures and fresh botanicals..."></textarea>
+            </div>
+            <div class="editor-field">
+              <label for="promoBannerImage">Promo Image URL</label>
+              <div class="file-upload-row">
+                <input type="text" id="promoBannerImage" placeholder="images/..."/>
+                <div class="file-upload-btn-wrap">
+                  <button class="btn btn-outline-dark btn-sm" type="button">Upload</button>
+                  <input type="file" class="file-uploader" data-target="promoBannerImage" accept="image/*"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Contact Information -->
+        <div class="editor-section">
+          <div class="editor-section-header">Contact Information</div>
+          <div class="editor-section-body">
+            <div class="editor-field">
+              <label for="contactEmail">Email Address</label>
+              <input type="text" id="contactEmail" placeholder="hello@lueurbeauty.com"/>
+            </div>
+            <div class="editor-field">
+              <label for="contactPhone">Phone Number</label>
+              <input type="text" id="contactPhone" placeholder="+1 (800) 583-7829"/>
+            </div>
+            <div class="editor-field">
+              <label for="contactAddress">Address</label>
+              <input type="text" id="contactAddress" placeholder="123 Rose Lane..."/>
+            </div>
+            <div class="editor-field">
+              <label for="contactHours">Business Hours</label>
+              <input type="text" id="contactHours" placeholder="Mon–Fri: 9am – 6pm PST"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Footer -->
+        <div class="editor-section">
+          <div class="editor-section-header">Footer Settings</div>
+          <div class="editor-section-body">
+            <div class="editor-field">
+              <label for="footerText">Footer About Text</label>
+              <textarea id="footerText" placeholder="Clean, botanical skincare crafted with care..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Theme Colors -->
+        <div class="editor-section">
+          <div class="editor-section-header">Theme Styling</div>
+          <div class="editor-section-body">
+            <div class="color-picker-grid">
+              <div class="color-picker-field">
+                <label for="theme_primaryColor">Primary Color</label>
+                <input type="color" id="theme_primaryColor" value="#b8848c"/>
+              </div>
+              <div class="color-picker-field">
+                <label for="theme_secondaryColor">Secondary Color</label>
+                <input type="color" id="theme_secondaryColor" value="#ddd0c4"/>
+              </div>
+              <div class="color-picker-field">
+                <label for="theme_accentColor">Accent Color</label>
+                <input type="color" id="theme_accentColor" value="#d4aeb5"/>
+              </div>
+              <div class="color-picker-field">
+                <label for="theme_textColor">Text Color</label>
+                <input type="color" id="theme_textColor" value="#4a3830"/>
+              </div>
+              <div class="color-picker-field" style="grid-column: span 2;">
+                <label for="theme_backgroundColor">Background Color</label>
+                <input type="color" id="theme_backgroundColor" value="#faf8f5"/>
+              </div>
+              <div class="color-picker-field" style="grid-column: span 2;">
+                <label for="theme_buttonColor">Button Color</label>
+                <input type="color" id="theme_buttonColor" value="#2c1f17"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Typography -->
+        <div class="editor-section">
+          <div class="editor-section-header">Typography</div>
+          <div class="editor-section-body">
+            <div class="editor-field">
+              <label for="typo_fontFamily">Font Pairing / Family</label>
+              <select id="typo_fontFamily">
+                <option value="Cormorant Garamond">Classic Editorial (Cormorant / DM Sans)</option>
+                <option value="Playfair Display">Modern Elegant (Playfair / Inter)</option>
+                <option value="Montserrat">Clean Minimalist (Montserrat / Roboto)</option>
+                <option value="Georgia">Traditional Serif (Georgia / System)</option>
+                <option value="Inter">Aesthetic Sans (Inter / Inter)</option>
+              </select>
+            </div>
+            <div class="editor-field">
+              <label for="typo_headingFontSize">Heading Font Size</label>
+              <input type="text" id="typo_headingFontSize" placeholder="3.2rem"/>
+            </div>
+            <div class="editor-field">
+              <label for="typo_paragraphFontSize">Paragraph Font Size</label>
+              <input type="text" id="typo_paragraphFontSize" placeholder="0.95rem"/>
+            </div>
+            <div class="editor-field">
+              <label for="typo_buttonFontSize">Button Font Size</label>
+              <input type="text" id="typo_buttonFontSize" placeholder="0.82rem"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. Layout Adjustments -->
+        <div class="editor-section">
+          <div class="editor-section-header">Layout Config</div>
+          <div class="editor-section-body">
+            <div class="editor-field">
+              <label for="layout_heroHeight">Hero Section Height</label>
+              <select id="layout_heroHeight">
+                <option value="70vh">Sleek (70vh)</option>
+                <option value="80vh">Balanced (80vh)</option>
+                <option value="92vh">Luxury Full (92vh)</option>
+                <option value="100vh">Immersive (100vh)</option>
+              </select>
+            </div>
+            <div class="editor-field">
+              <label for="layout_gridColumns">Product Grid Columns</label>
+              <select id="layout_gridColumns">
+                <option value="2">2 Columns</option>
+                <option value="3">3 Columns</option>
+                <option value="4">4 Columns</option>
+              </select>
+            </div>
+            <div class="editor-field">
+              <label for="layout_cardBorderRadius">Card Border Radius</label>
+              <input type="text" id="layout_cardBorderRadius" placeholder="6px"/>
+            </div>
+            <div class="editor-field">
+              <label for="layout_cardSpacing">Card Spacing (Grid Gap)</label>
+              <input type="text" id="layout_cardSpacing" placeholder="28px"/>
+            </div>
+            <div class="editor-field">
+              <label for="layout_sectionPadding">Section Vertical Padding</label>
+              <input type="text" id="layout_sectionPadding" placeholder="110px"/>
+            </div>
+            <div class="editor-field">
+              <label for="layout_containerWidth">Page Max Width</label>
+              <input type="text" id="layout_containerWidth" placeholder="1260px"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. Section Visibility -->
+        <div class="editor-section">
+          <div class="editor-section-header">Section Visibility</div>
+          <div class="editor-section-body">
+            <div class="toggle-row">
+              <label>Hero Section</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="vis_hero" checked/>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <label>Featured Products</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="vis_featured" checked/>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <label>About Section</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="vis_about" checked/>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <label>Reviews Carousel</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="vis_reviews" checked/>
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <label>Contact Form Section</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="vis_contact" checked/>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11. Section Ordering -->
+        <div class="editor-section">
+          <div class="editor-section-header">Section Order</div>
+          <div class="editor-section-body">
+            <p style="font-size: 0.72rem; color: var(--text-light); margin-bottom: 8px;">
+              Arrange the order in which sections render on the home page.
+            </p>
+            <div class="order-list" id="order-list-container">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- RIGHT PREVIEW PANE -->
+    <div class="editor-preview">
+      <iframe src="index.html?preview=true" id="preview-iframe"></iframe>
+    </div>
+    
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="editor.js"></script>
+</body>
+</html>

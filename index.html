@@ -15,6 +15,8 @@
     rel="stylesheet" />
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
+  <!-- Website Editor Runtime -->
+  <script src="website-editor-runtime.js"></script>
 </head>
 
 <body>
@@ -27,7 +29,7 @@
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">Lueur <em>Beauty</em></a>
+      <a href="index.html" class="nav-logo" id="nav-logo-text">Lueur <em>Beauty</em></a>
       <ul class="nav-links" id="nav-links">
         <li><a href="index.html#home" class="active" id="nav-home">Home</a></li>
         <li><a href="products.html" id="nav-products">Shop</a></li>
@@ -92,9 +94,8 @@
     <div class="container">
       <div class="hero-content">
         <span class="hero-eyebrow">The 2026 Collection</span>
-        <h1>Elevated Essentials<br /><em>for Healthy Skin</em></h1>
-        <p>Thoughtfully crafted skincare with clean, botanical ingredients. Designed for visible radiance that feels
-          completely natural.</p>
+        <h1 id="hero-title">Elevated Essentials<br /><em>for Healthy Skin</em></h1>
+        <p id="hero-subtitle">Thoughtfully crafted skincare with clean, botanical ingredients. Designed for visible radiance that feels completely natural.</p>
         <div class="hero-btns">
           <a href="products.html" class="btn btn-hero-primary" id="hero-shop-btn">Shop Collection</a>
           <a href="#about" class="btn btn-hero-outline" id="hero-story-btn">Our Story</a>
@@ -170,18 +171,18 @@
   </section>
 
   <!-- ===== PROMO BANNER ===== -->
-  <section class="promo-banner">
+  <section class="promo-banner" id="promo-banner">
     <div class="promo-banner-inner">
       <div class="promo-content">
-        <span class="promo-tag">Seasonal Edit</span>
-        <h2>Spring Collection<br /><strong>Up to 40% Off</strong></h2>
-        <p>Light textures and fresh botanicals for the warmer months ahead.</p>
+        <span class="promo-tag" id="promo-banner-tag">Seasonal Edit</span>
+        <h2 id="promo-banner-title">Spring Collection<br /><strong>Up to 40% Off</strong></h2>
+        <p id="promo-banner-subtitle">Light textures and fresh botanicals for the warmer months ahead.</p>
         <div class="promo-actions">
           <a href="products.html" class="btn btn-promo" id="promo-shop-btn">Shop Now</a>
         </div>
       </div>
       <div class="promo-image">
-        <img src="images/promo_banner_sale.png" alt="Spring Collection - Lueur Beauty" />
+        <img src="images/promo_banner_sale.png" alt="Spring Collection - Lueur Beauty" id="promo-banner-img" />
       </div>
     </div>
   </section>
@@ -212,7 +213,7 @@
   <section class="about" id="about">
     <div class="about-inner">
       <div class="about-image-col">
-        <img src="images/about_model_photo.png" alt="Natural beauty - Lueur Beauty brand story" />
+        <img src="images/about_model_photo.png" alt="Natural beauty - Lueur Beauty brand story" id="about-section-img" />
         <div class="about-stat-card">
           <h3>5+</h3>
           <p>Years of Glow</p>
@@ -221,9 +222,8 @@
       <div class="about-content-col">
         <span class="section-tag">Our Story</span>
         <h2 class="section-title">Rooted in<br />Nature's Finest</h2>
-        <p>Founded in 2020, Lueur was born from a simple belief: your skin deserves ingredients you can trust. We source
-          botanical extracts, cold-pressed oils, and plant actives to create formulas that are gentle and effective.</p>
-        <p>Every product is dermatologist-tested, cruelty-free, and packaged in eco-conscious materials.</p>
+        <p id="about-text-primary">Founded in 2020, Lueur was born from a simple belief: your skin deserves ingredients you can trust. We source botanical extracts, cold-pressed oils, and plant actives to create formulas that are gentle and effective.</p>
+        <p id="about-text-secondary">Every product is dermatologist-tested, cruelty-free, and packaged in eco-conscious materials.</p>
         <div class="ingredients-grid">
           <div class="ingredient-pill">Rose Extract</div>
           <div class="ingredient-pill">Aloe Vera</div>
@@ -334,7 +334,7 @@
               </div>
               <div>
                 <h4>Email Us</h4>
-                <p>hello@lueurbeauty.com</p>
+                <p id="contact-info-email">hello@lueurbeauty.com</p>
               </div>
             </div>
             <div class="contact-item">
@@ -346,7 +346,7 @@
               </div>
               <div>
                 <h4>Call Us</h4>
-                <p>+1 (800) 583-7829</p>
+                <p id="contact-info-phone">+1 (800) 583-7829</p>
               </div>
             </div>
             <div class="contact-item">
@@ -358,7 +358,7 @@
               </div>
               <div>
                 <h4>Visit Us</h4>
-                <p>123 Rose Lane, Beverly Hills, CA 90210</p>
+                <p id="contact-info-address">123 Rose Lane, Beverly Hills, CA 90210</p>
               </div>
             </div>
             <div class="contact-item">
@@ -370,7 +370,7 @@
               </div>
               <div>
                 <h4>Hours</h4>
-                <p>Mon–Fri: 9am – 6pm PST</p>
+                <p id="contact-info-hours">Mon–Fri: 9am – 6pm PST</p>
               </div>
             </div>
           </div>
@@ -442,8 +442,8 @@
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <div class="footer-logo">Lueur <em>Beauty</em></div>
-            <p>Clean, botanical skincare crafted with care. Designed for radiance that feels natural.</p>
+            <div class="footer-logo" id="footer-logo-text">Lueur <em>Beauty</em></div>
+            <p id="footer-about-text">Clean, botanical skincare crafted with care. Designed for radiance that feels natural.</p>
             <div class="social-links footer-socials">
               <a href="#" class="social-link" title="Instagram" id="footer-instagram">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">

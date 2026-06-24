@@ -15,6 +15,7 @@
     rel="stylesheet" />
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
+  <script src="website-editor-runtime.js"></script>
 </head>
 
 <body>
@@ -22,7 +23,7 @@
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">Lueur <em>Beauty</em></a>
+      <a href="index.html" class="nav-logo" id="nav-logo-text">Lueur <em>Beauty</em></a>
       <ul class="nav-links" id="nav-links">
         <li><a href="index.html" id="nav-home">Home</a></li>
         <li><a href="products.html" id="nav-products">Shop</a></li>
@@ -134,8 +135,8 @@
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <div class="footer-logo">Lueur <em>Beauty</em></div>
-            <p>Clean, botanical skincare crafted with care.</p>
+            <div class="footer-logo" id="footer-logo-text">Lueur <em>Beauty</em></div>
+            <p id="footer-about-text">Clean, botanical skincare crafted with care.</p>
           </div>
           <div class="footer-col">
             <h4>Quick Links</h4>
