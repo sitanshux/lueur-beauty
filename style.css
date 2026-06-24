@@ -765,7 +765,7 @@ ul {
 .products-section {
   padding: 100px 0;
   background: var(--cream);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
 }
 
 .products-filters {
@@ -900,7 +900,7 @@ ul {
   padding: 0;
   overflow: hidden;
   background: var(--warm-white);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
 }
 
 .about-inner {
@@ -1004,7 +1004,7 @@ ul {
 .reviews {
   padding: 110px 0;
   background: var(--cream);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
 }
 
 .reviews-layout {
